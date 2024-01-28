@@ -1,10 +1,10 @@
 {
-  "name": "PizzaApp",
-  "displayName": "PizzaApp",
+  "name": "GlucoTrack",
+  "displayName": "GlucoTrack",
   "expo": {
-    "name": "PizzaApp",
-    "slug": "PizzaApp",
-    "scheme": "pizzaapp",
+    "name": "GlucoTrack",
+    "slug": "GlucoTrack",
+    "scheme": "GlucoTrack",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/app-icon-all.png",

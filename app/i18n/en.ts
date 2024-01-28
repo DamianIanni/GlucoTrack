@@ -4,6 +4,7 @@ const en = {
     cancel: "Cancel",
     back: "Back",
     logOut: "Log Out",
+    save: "Save",
   },
   welcomeScreen: {
     postscript:
@@ -32,8 +33,7 @@ const en = {
   },
   loginScreen: {
     signIn: "Hello!",
-    enterDetails:
-      "Just enter your Name to continue, so we can get to know you better.",
+    enterDetails: "Just enter your Name to continue, so we can get to know you better.",
     emailFieldLabel: "Name",
     passwordFieldLabel: "Surname",
     emailFieldPlaceholder: "Enter your Name here.",
@@ -43,7 +43,7 @@ const en = {
   },
   demoNavigator: {
     componentsTab: "Components",
-    debugTab: "Debug",
+    debugTab: "Info",
     communityTab: "Community",
     podcastListTab: "Months",
   },
@@ -97,6 +97,7 @@ const en = {
       "If this doesn't work, ensure the Reactotron desktop app is running and reload app.",
     windowsReactotronHint:
       "If this doesn't work, ensure the Reactotron desktop app is running and reload app.",
+    newNamePlaceHolder: "Enter the new name",
   },
   demoPodcastListScreen: {
     title: "Select a month",

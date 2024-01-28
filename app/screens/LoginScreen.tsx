@@ -5,12 +5,14 @@ import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
+import { saveString } from "app/utils/storage"
 
 interface LoginScreenProps extends AppStackScreenProps<"Login"> {}
 
 export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_props) {
   const authPasswordInput = useRef<TextInput>(null)
-
+  
+  const USER_NAME = "userName"
   const [authPassword, setAuthPassword] = useState("")
   // const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -20,6 +22,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   } = useStores()
 
   useEffect(() => {
+    
     // Here is where you could fetch credentials from keychain or storage
     // and pre-fill the form fields.
     setAuthEmail("")
@@ -42,6 +45,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 
     // Make a request to your server to get an authentication token.
     // If successful, reset the fields and set the token.
+    saveString(USER_NAME, authEmail)
     setIsSubmitted(false)
     setAuthPassword("")
     setAuthEmail("")
