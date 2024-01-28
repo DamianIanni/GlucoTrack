@@ -55,7 +55,7 @@ export function DemoNavigator() {
         }}
       />
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name="DemoCommunity"
         component={DemoCommunityScreen}
         options={{
@@ -64,7 +64,7 @@ export function DemoNavigator() {
             <Icon icon="community" color={focused ? colors.tint : undefined} size={30} />
           ),
         }}
-      />
+      /> */}
 
       <Tab.Screen
         name="DemoPodcastList"

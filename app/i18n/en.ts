@@ -31,21 +31,21 @@ const en = {
     invalidEmail: "Invalid email address.",
   },
   loginScreen: {
-    signIn: "Sign In",
+    signIn: "Hello!",
     enterDetails:
-      "Enter your details below to unlock top secret info. You'll never guess what we've got waiting. Or maybe you will; it's not rocket science here.",
-    emailFieldLabel: "Email",
-    passwordFieldLabel: "Password",
-    emailFieldPlaceholder: "Enter your email address",
-    passwordFieldPlaceholder: "Super secret password here",
-    tapToSignIn: "Tap to sign in!",
+      "Just enter your Name to continue, so we can get to know you better.",
+    emailFieldLabel: "Name",
+    passwordFieldLabel: "Surname",
+    emailFieldPlaceholder: "Enter your Name here.",
+    passwordFieldPlaceholder: "Enter your Surname here",
+    tapToSignIn: "Continue",
     hint: "Hint: you can use any email address and your favorite password :)",
   },
   demoNavigator: {
     componentsTab: "Components",
     debugTab: "Debug",
     communityTab: "Community",
-    podcastListTab: "Podcast",
+    podcastListTab: "Months",
   },
   demoCommunityScreen: {
     title: "Connect with the community",
@@ -80,7 +80,7 @@ const en = {
   },
   demoDebugScreen: {
     howTo: "HOW TO",
-    title: "Debug",
+    title: "Personal Info.",
     tagLine:
       "Congratulations, you've got a very advanced React Native app template here.  Take advantage of this boilerplate!",
     reactotron: "Send to Reactotron",
@@ -99,7 +99,7 @@ const en = {
       "If this doesn't work, ensure the Reactotron desktop app is running and reload app.",
   },
   demoPodcastListScreen: {
-    title: "React Native Radio episodes",
+    title: "Select a month",
     onlyFavorites: "Only Show Favorites",
     favoriteButton: "Favorite",
     unfavoriteButton: "Unfavorite",

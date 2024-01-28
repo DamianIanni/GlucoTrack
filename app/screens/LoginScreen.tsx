@@ -12,7 +12,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const authPasswordInput = useRef<TextInput>(null)
 
   const [authPassword, setAuthPassword] = useState("")
-  const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
+  // const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [attemptsCount, setAttemptsCount] = useState(0)
   const {
@@ -22,8 +22,8 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   useEffect(() => {
     // Here is where you could fetch credentials from keychain or storage
     // and pre-fill the form fields.
-    setAuthEmail("ignite@infinite.red")
-    setAuthPassword("ign1teIsAwes0m3")
+    setAuthEmail("")
+    setAuthPassword("")
 
     // Return a "cleanup" function that React will run when the component unmounts
     return () => {
@@ -50,21 +50,21 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
     setAuthToken(String(Date.now()))
   }
 
-  const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(
-    () =>
-      function PasswordRightAccessory(props: TextFieldAccessoryProps) {
-        return (
-          <Icon
-            icon={isAuthPasswordHidden ? "view" : "hidden"}
-            color={colors.palette.neutral800}
-            containerStyle={props.style}
-            size={20}
-            onPress={() => setIsAuthPasswordHidden(!isAuthPasswordHidden)}
-          />
-        )
-      },
-    [isAuthPasswordHidden],
-  )
+  // const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(
+  //   () =>
+  //     function PasswordRightAccessory(props: TextFieldAccessoryProps) {
+  //       return (
+  //         <Icon
+  //           icon={isAuthPasswordHidden ? "view" : "hidden"}
+  //           color={colors.palette.neutral800}
+  //           containerStyle={props.style}
+  //           size={20}
+  //           onPress={() => setIsAuthPasswordHidden(!isAuthPasswordHidden)}
+  //         />
+  //       )
+  //     },
+  //   [isAuthPasswordHidden],
+  // )
 
   return (
     <Screen
@@ -91,7 +91,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         onSubmitEditing={() => authPasswordInput.current?.focus()}
       />
 
-      <TextField
+      {/* <TextField
         ref={authPasswordInput}
         value={authPassword}
         onChangeText={setAuthPassword}
@@ -99,12 +99,12 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         autoCapitalize="none"
         autoComplete="password"
         autoCorrect={false}
-        secureTextEntry={isAuthPasswordHidden}
+        // secureTextEntry={isAuthPasswordHidden}
         labelTx="loginScreen.passwordFieldLabel"
         placeholderTx="loginScreen.passwordFieldPlaceholder"
         onSubmitEditing={login}
-        RightAccessory={PasswordRightAccessory}
-      />
+        // RightAccessory={PasswordRightAccessory}
+      /> */}
 
       <Button
         testID="login-button"

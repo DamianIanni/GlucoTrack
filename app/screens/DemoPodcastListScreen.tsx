@@ -50,24 +50,24 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
   function DemoPodcastListScreen(_props) {
     const { episodeStore } = useStores()
 
-    const [refreshing, setRefreshing] = React.useState(false)
-    const [isLoading, setIsLoading] = React.useState(false)
+    // const [refreshing, setRefreshing] = React.useState(false)
+    // const [isLoading, setIsLoading] = React.useState(false)
 
     // initially, kick off a background refresh without the refreshing UI
-    useEffect(() => {
-      ;(async function load() {
-        setIsLoading(true)
-        await episodeStore.fetchEpisodes()
-        setIsLoading(false)
-      })()
-    }, [episodeStore])
+    // useEffect(() => {
+    //   ;(async function load() {
+    //     setIsLoading(true)
+    //     await episodeStore.fetchEpisodes()
+    //     setIsLoading(false)
+    //   })()
+    // }, [episodeStore])
 
     // simulate a longer refresh, if the refresh is too fast for UX
-    async function manualRefresh() {
-      setRefreshing(true)
-      await Promise.all([episodeStore.fetchEpisodes(), delay(750)])
-      setRefreshing(false)
-    }
+    // async function manualRefresh() {
+    //   setRefreshing(true)
+    //   await Promise.all([episodeStore.fetchEpisodes(), delay(750)])
+    //   setRefreshing(false)
+    // }
 
     return (
       <Screen
@@ -79,37 +79,37 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
           contentContainerStyle={$listContentContainer}
           data={episodeStore.episodesForList.slice()}
           extraData={episodeStore.favorites.length + episodeStore.episodes.length}
-          refreshing={refreshing}
+          // refreshing={refreshing}
           estimatedItemSize={177}
-          onRefresh={manualRefresh}
-          ListEmptyComponent={
-            isLoading ? (
-              <ActivityIndicator />
-            ) : (
-              <EmptyState
-                preset="generic"
-                style={$emptyState}
-                headingTx={
-                  episodeStore.favoritesOnly
-                    ? "demoPodcastListScreen.noFavoritesEmptyState.heading"
-                    : undefined
-                }
-                contentTx={
-                  episodeStore.favoritesOnly
-                    ? "demoPodcastListScreen.noFavoritesEmptyState.content"
-                    : undefined
-                }
-                button={episodeStore.favoritesOnly ? "" : undefined}
-                buttonOnPress={manualRefresh}
-                imageStyle={$emptyStateImage}
-                ImageProps={{ resizeMode: "contain" }}
-              />
-            )
-          }
+          // onRefresh={manualRefresh}
+          // ListEmptyComponent={
+          //   isLoading ? (
+          //     <ActivityIndicator />
+          //   ) : (
+          //     <EmptyState
+          //       preset="generic"
+          //       style={$emptyState}
+          //       headingTx={
+          //         episodeStore.favoritesOnly
+          //           ? "demoPodcastListScreen.noFavoritesEmptyState.heading"
+          //           : undefined
+          //       }
+          //       contentTx={
+          //         episodeStore.favoritesOnly
+          //           ? "demoPodcastListScreen.noFavoritesEmptyState.content"
+          //           : undefined
+          //       }
+          //       button={episodeStore.favoritesOnly ? "" : undefined}
+          //       buttonOnPress={manualRefresh}
+          //       imageStyle={$emptyStateImage}
+          //       ImageProps={{ resizeMode: "contain" }}
+          //     />
+          //   )
+          // }
           ListHeaderComponent={
             <View style={$heading}>
               <Text preset="heading" tx="demoPodcastListScreen.title" />
-              {(episodeStore.favoritesOnly || episodeStore.episodesForList.length > 0) && (
+              {/* {(episodeStore.favoritesOnly || episodeStore.episodesForList.length > 0) && (
                 <View style={$toggle}>
                   <Toggle
                     value={episodeStore.favoritesOnly}
@@ -123,7 +123,7 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
                     accessibilityLabel={translate("demoPodcastListScreen.accessibility.switch")}
                   />
                 </View>
-              )}
+              )} */}
             </View>
           }
           renderItem={({ item }) => (
@@ -148,6 +148,8 @@ const EpisodeCard = observer(function EpisodeCard({
   onPressFavorite: () => void
   isFavorite: boolean
 }) {
+  // console.log("EPISODE", JSON.stringify(episode, null, 4));
+  
   const liked = useSharedValue(isFavorite ? 1 : 0)
 
   const imageUri = useMemo<ImageSourcePropType>(() => {
@@ -215,7 +217,7 @@ const EpisodeCard = observer(function EpisodeCard({
   }
 
   const handlePressCard = () => {
-    openLinkInBrowser(episode.enclosure.link)
+    // openLinkInBrowser(episode.enclosure.link)
   }
 
   const ButtonLeftAccessory: ComponentType<ButtonAccessoryProps> = useMemo(
@@ -250,28 +252,28 @@ const EpisodeCard = observer(function EpisodeCard({
       style={$item}
       verticalAlignment="force-footer-bottom"
       onPress={handlePressCard}
-      onLongPress={handlePressFavorite}
+      // onLongPress={handlePressFavorite}
       HeadingComponent={
         <View style={$metadata}>
           <Text
             style={$metadataText}
-            size="xxs"
+            size="xl"
             accessibilityLabel={episode.datePublished.accessibilityLabel}
           >
             {episode.datePublished.textLabel}
           </Text>
-          <Text
+          {/* <Text
             style={$metadataText}
             size="xxs"
             accessibilityLabel={episode.duration.accessibilityLabel}
           >
             {episode.duration.textLabel}
-          </Text>
+          </Text> */}
         </View>
       }
       content={`${episode.parsedTitleAndSubtitle.title} - ${episode.parsedTitleAndSubtitle.subtitle}`}
-      {...accessibilityHintProps}
-      RightComponent={<Image source={imageUri} style={$itemThumbnail} />}
+      // {...accessibilityHintProps}
+      // RightComponent={<Image source={imageUri} style={$itemThumbnail} />}
       FooterComponent={
         <Button
           onPress={handlePressFavorite}
