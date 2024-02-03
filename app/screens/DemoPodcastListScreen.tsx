@@ -38,6 +38,7 @@ import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { colors, spacing } from "../theme"
 import { delay } from "../utils/delay"
 import { openLinkInBrowser } from "../utils/openLinkInBrowser"
+import {navigate} from "../navigators/navigationUtilities"
 
 const ICON_SIZE = 14
 
@@ -49,7 +50,20 @@ const rnrImages = [rnrImage1, rnrImage2, rnrImage3]
 export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = observer(
   function DemoPodcastListScreen(_props) {
     const { episodeStore } = useStores()
-
+    const monthsArray = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ]
     // const [refreshing, setRefreshing] = React.useState(false)
     // const [isLoading, setIsLoading] = React.useState(false)
 
@@ -75,62 +89,24 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
         safeAreaEdges={["top"]}
         contentContainerStyle={$screenContentContainer}
       >
-        <ListView<Episode>
+        <ListView<string>
           contentContainerStyle={$listContentContainer}
-          data={episodeStore.episodesForList.slice()}
+          // data={episodeStore.episodesForList.slice()}
+          data={monthsArray}
           extraData={episodeStore.favorites.length + episodeStore.episodes.length}
           // refreshing={refreshing}
           estimatedItemSize={177}
-          // onRefresh={manualRefresh}
-          // ListEmptyComponent={
-          //   isLoading ? (
-          //     <ActivityIndicator />
-          //   ) : (
-          //     <EmptyState
-          //       preset="generic"
-          //       style={$emptyState}
-          //       headingTx={
-          //         episodeStore.favoritesOnly
-          //           ? "demoPodcastListScreen.noFavoritesEmptyState.heading"
-          //           : undefined
-          //       }
-          //       contentTx={
-          //         episodeStore.favoritesOnly
-          //           ? "demoPodcastListScreen.noFavoritesEmptyState.content"
-          //           : undefined
-          //       }
-          //       button={episodeStore.favoritesOnly ? "" : undefined}
-          //       buttonOnPress={manualRefresh}
-          //       imageStyle={$emptyStateImage}
-          //       ImageProps={{ resizeMode: "contain" }}
-          //     />
-          //   )
-          // }
           ListHeaderComponent={
             <View style={$heading}>
               <Text preset="heading" tx="demoPodcastListScreen.title" />
-              {/* {(episodeStore.favoritesOnly || episodeStore.episodesForList.length > 0) && (
-                <View style={$toggle}>
-                  <Toggle
-                    value={episodeStore.favoritesOnly}
-                    onValueChange={() =>
-                      episodeStore.setProp("favoritesOnly", !episodeStore.favoritesOnly)
-                    }
-                    variant="switch"
-                    labelTx="demoPodcastListScreen.onlyFavorites"
-                    labelPosition="left"
-                    labelStyle={$labelStyle}
-                    accessibilityLabel={translate("demoPodcastListScreen.accessibility.switch")}
-                  />
-                </View>
-              )} */}
             </View>
           }
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <EpisodeCard
               episode={item}
-              isFavorite={episodeStore.hasFavorite(item)}
-              onPressFavorite={() => episodeStore.toggleFavorite(item)}
+              numberIndex={index}
+              // isFavorite={item}
+              // onPressFavorite={() => episodeStore.toggleFavorite(item)}
             />
           )}
         />
@@ -141,163 +117,121 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
 
 const EpisodeCard = observer(function EpisodeCard({
   episode,
-  isFavorite,
-  onPressFavorite,
-}: {
-  episode: Episode
-  onPressFavorite: () => void
-  isFavorite: boolean
+  numberIndex
+}: // isFavorite,
+// onPressFavorite,
+{
+  episode: string,
+  numberIndex: any
+  // onPressFavorite: () => void
+  // isFavorite: string
 }) {
   // console.log("EPISODE", JSON.stringify(episode, null, 4));
-  
-  const liked = useSharedValue(isFavorite ? 1 : 0)
+
+  // const liked = useSharedValue(isFavorite ? 1 : 0)
 
   const imageUri = useMemo<ImageSourcePropType>(() => {
     return rnrImages[Math.floor(Math.random() * rnrImages.length)]
   }, [])
 
-  // Grey heart
-  const animatedLikeButtonStyles = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          scale: interpolate(liked.value, [0, 1], [1, 0], Extrapolate.EXTEND),
-        },
-      ],
-      opacity: interpolate(liked.value, [0, 1], [1, 0], Extrapolate.CLAMP),
-    }
-  })
+  const moreFunction = () => {
+    console.log("MORE")
+  }
 
-  // Pink heart
-  const animatedUnlikeButtonStyles = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          scale: liked.value,
-        },
-      ],
-      opacity: liked.value,
-    }
-  })
+  const objDate = {
+    episode: episode,
+    numberIndex: `${numberIndex}`
+  }
 
   /**
    * Android has a "longpress" accessibility action. iOS does not, so we just have to use a hint.
    * @see https://reactnative.dev/docs/accessibility#accessibilityactions
    */
-  const accessibilityHintProps = useMemo(
-    () =>
-      Platform.select<AccessibilityProps>({
-        ios: {
-          accessibilityLabel: episode.title,
-          accessibilityHint: translate("demoPodcastListScreen.accessibility.cardHint", {
-            action: isFavorite ? "unfavorite" : "favorite",
-          }),
-        },
-        android: {
-          accessibilityLabel: episode.title,
-          accessibilityActions: [
-            {
-              name: "longpress",
-              label: translate("demoPodcastListScreen.accessibility.favoriteAction"),
-            },
-          ],
-          onAccessibilityAction: ({ nativeEvent }) => {
-            if (nativeEvent.actionName === "longpress") {
-              handlePressFavorite()
-            }
-          },
-        },
-      }),
-    [episode, isFavorite],
-  )
+  // const accessibilityHintProps = useMemo(
+  //   () =>
+  //     Platform.select<AccessibilityProps>({
+  //       ios: {
+  //         accessibilityLabel: episode.title,
+  //         accessibilityHint: translate("demoPodcastListScreen.accessibility.cardHint", {
+  //           action: isFavorite ? "unfavorite" : "favorite",
+  //         }),
+  //       },
+  //       android: {
+  //         accessibilityLabel: episode.title,
+  //         accessibilityActions: [
+  //           {
+  //             name: "longpress",
+  //             label: translate("demoPodcastListScreen.accessibility.favoriteAction"),
+  //           },
+  //         ],
+  //         onAccessibilityAction: ({ nativeEvent }) => {
+  //           if (nativeEvent.actionName === "longpress") {
+  //             handlePressFavorite()
+  //           }
+  //         },
+  //       },
+  //     }),
+  //   [episode, isFavorite],
+  // )
 
-  const handlePressFavorite = () => {
-    onPressFavorite()
-    liked.value = withSpring(liked.value ? 0 : 1)
-  }
+  // const handlePressFavorite = () => {
+  //   onPressFavorite()
+  //   liked.value = withSpring(liked.value ? 0 : 1)
+  // }
 
   const handlePressCard = () => {
-    // openLinkInBrowser(episode.enclosure.link)
+    // console.log("LAS PROPS", JSON.stringify(props, null, 3));
+    navigate("AddValuesScreen", JSON.stringify(objDate))
   }
 
-  const ButtonLeftAccessory: ComponentType<ButtonAccessoryProps> = useMemo(
-    () =>
-      function ButtonLeftAccessory() {
-        return (
-          <View>
-            <Animated.View
-              style={[$iconContainer, StyleSheet.absoluteFill, animatedLikeButtonStyles]}
-            >
-              <Icon
-                icon="heart"
-                size={ICON_SIZE}
-                color={colors.palette.neutral800} // dark grey
-              />
-            </Animated.View>
-            <Animated.View style={[$iconContainer, animatedUnlikeButtonStyles]}>
-              <Icon
-                icon="heart"
-                size={ICON_SIZE}
-                color={colors.palette.primary400} // pink
-              />
-            </Animated.View>
-          </View>
-        )
-      },
-    [],
-  )
+  // const ButtonLeftAccessory: ComponentType<ButtonAccessoryProps> = useMemo(
+  //   () =>
+  //     function ButtonLeftAccessory() {
+  //       return (
+  //         <View>
+  //           <Animated.View
+  //             style={[$iconContainer, StyleSheet.absoluteFill, animatedLikeButtonStyles]}
+  //           >
+  //             <Icon
+  //               icon="heart"
+  //               size={ICON_SIZE}
+  //               color={colors.palette.neutral800} // dark grey
+  //             />
+  //           </Animated.View>
+  //           <Animated.View style={[$iconContainer, animatedUnlikeButtonStyles]}>
+  //             <Icon
+  //               icon="heart"
+  //               size={ICON_SIZE}
+  //               color={colors.palette.primary400} // pink
+  //             />
+  //           </Animated.View>
+  //         </View>
+  //       )
+  //     },
+  //   [],
+  // )
 
   return (
     <Card
       style={$item}
       verticalAlignment="force-footer-bottom"
       onPress={handlePressCard}
-      // onLongPress={handlePressFavorite}
       HeadingComponent={
         <View style={$metadata}>
           <Text
             style={$metadataText}
             size="xl"
-            accessibilityLabel={episode.datePublished.accessibilityLabel}
           >
-            {episode.datePublished.textLabel}
+            {episode}
           </Text>
-          {/* <Text
-            style={$metadataText}
-            size="xxs"
-            accessibilityLabel={episode.duration.accessibilityLabel}
-          >
-            {episode.duration.textLabel}
-          </Text> */}
         </View>
       }
-      content={`${episode.parsedTitleAndSubtitle.title} - ${episode.parsedTitleAndSubtitle.subtitle}`}
-      // {...accessibilityHintProps}
-      // RightComponent={<Image source={imageUri} style={$itemThumbnail} />}
-      FooterComponent={
-        <Button
-          onPress={handlePressFavorite}
-          onLongPress={handlePressFavorite}
-          style={[$favoriteButton, isFavorite && $unFavoriteButton]}
-          accessibilityLabel={
-            isFavorite
-              ? translate("demoPodcastListScreen.accessibility.unfavoriteIcon")
-              : translate("demoPodcastListScreen.accessibility.favoriteIcon")
-          }
-          LeftAccessory={ButtonLeftAccessory}
-        >
-          <Text
-            size="xxs"
-            accessibilityLabel={episode.duration.accessibilityLabel}
-            weight="medium"
-            text={
-              isFavorite
-                ? translate("demoPodcastListScreen.unfavoriteButton")
-                : translate("demoPodcastListScreen.favoriteButton")
-            }
-          />
-        </Button>
+      RightComponent={
+        // Custom component
+        <Button text="+More" onPress={() => moreFunction()} 
+        style={$favoriteButton}/>
       }
+      content={`Month average: ${episode}`}
     />
   )
 })
@@ -358,7 +292,7 @@ const $metadataText: TextStyle = {
 
 const $favoriteButton: ViewStyle = {
   borderRadius: 17,
-  marginTop: spacing.md,
+  marginTop: spacing.xs,
   justifyContent: "flex-start",
   backgroundColor: colors.palette.neutral300,
   borderColor: colors.palette.neutral300,

@@ -120,7 +120,13 @@ const en = {
         "No favorites have been added yet. Tap the heart on an episode to add it to your favorites!",
     },
   },
+  addValueScreen: {
+    inputsAddValues: {
+      add_value: "Add value"
+    }
+  }
 }
 
 export default en
 export type Translations = typeof en
+
