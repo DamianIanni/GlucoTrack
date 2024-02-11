@@ -122,7 +122,9 @@ const en = {
   },
   addValueScreen: {
     inputsAddValues: {
-      add_value: "Add value"
+      add_value: "Add value",
+      _time: "Select the time you measured your blood sugar",
+      _value: "and enter the value of that measurement !"
     }
   }
 }

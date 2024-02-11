@@ -1,44 +1,28 @@
 import { observer } from "mobx-react-lite"
-import React, { ComponentType, FC, useEffect, useMemo } from "react"
+import React, { FC, useEffect, useMemo } from "react"
 import {
-  AccessibilityProps,
-  ActivityIndicator,
-  Image,
   ImageSourcePropType,
   ImageStyle,
-  Platform,
-  StyleSheet,
   TextStyle,
   View,
   ViewStyle,
 } from "react-native"
 import { type ContentStyle } from "@shopify/flash-list"
-import Animated, {
-  Extrapolate,
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated"
+
 import {
   Button,
-  ButtonAccessoryProps,
   Card,
-  EmptyState,
-  Icon,
   ListView,
   Screen,
   Text,
-  Toggle,
 } from "../components"
 import { isRTL, translate } from "../i18n"
 import { useStores } from "../models"
-import { Episode } from "../models/Episode"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { colors, spacing } from "../theme"
-import { delay } from "../utils/delay"
-import { openLinkInBrowser } from "../utils/openLinkInBrowser"
+// import { delay } from "../utils/delay"
 import {navigate} from "../navigators/navigationUtilities"
+import { createMonths } from "app/realmModel/useRealmModels"
 
 const ICON_SIZE = 14
 
@@ -49,7 +33,6 @@ const rnrImages = [rnrImage1, rnrImage2, rnrImage3]
 
 export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = observer(
   function DemoPodcastListScreen(_props) {
-    const { episodeStore } = useStores()
     const monthsArray = [
       "January",
       "February",
@@ -64,24 +47,10 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
       "November",
       "December",
     ]
-    // const [refreshing, setRefreshing] = React.useState(false)
-    // const [isLoading, setIsLoading] = React.useState(false)
-
-    // initially, kick off a background refresh without the refreshing UI
+    
+    createMonths(monthsArray)
     // useEffect(() => {
-    //   ;(async function load() {
-    //     setIsLoading(true)
-    //     await episodeStore.fetchEpisodes()
-    //     setIsLoading(false)
-    //   })()
-    // }, [episodeStore])
-
-    // simulate a longer refresh, if the refresh is too fast for UX
-    // async function manualRefresh() {
-    //   setRefreshing(true)
-    //   await Promise.all([episodeStore.fetchEpisodes(), delay(750)])
-    //   setRefreshing(false)
-    // }
+    // },[])
 
     return (
       <Screen
@@ -91,10 +60,7 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
       >
         <ListView<string>
           contentContainerStyle={$listContentContainer}
-          // data={episodeStore.episodesForList.slice()}
           data={monthsArray}
-          extraData={episodeStore.favorites.length + episodeStore.episodes.length}
-          // refreshing={refreshing}
           estimatedItemSize={177}
           ListHeaderComponent={
             <View style={$heading}>
@@ -103,10 +69,8 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
           }
           renderItem={({ item, index }) => (
             <EpisodeCard
-              episode={item}
+              monthName={item}
               numberIndex={index}
-              // isFavorite={item}
-              // onPressFavorite={() => episodeStore.toggleFavorite(item)}
             />
           )}
         />
@@ -116,12 +80,12 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
 )
 
 const EpisodeCard = observer(function EpisodeCard({
-  episode,
+  monthName,
   numberIndex
 }: // isFavorite,
 // onPressFavorite,
 {
-  episode: string,
+  monthName: string,
   numberIndex: any
   // onPressFavorite: () => void
   // isFavorite: string
@@ -139,7 +103,7 @@ const EpisodeCard = observer(function EpisodeCard({
   }
 
   const objDate = {
-    episode: episode,
+    monthName: monthName,
     numberIndex: `${numberIndex}`
   }
 
@@ -222,7 +186,7 @@ const EpisodeCard = observer(function EpisodeCard({
             style={$metadataText}
             size="xl"
           >
-            {episode}
+            {monthName}
           </Text>
         </View>
       }
@@ -231,7 +195,7 @@ const EpisodeCard = observer(function EpisodeCard({
         <Button text="+More" onPress={() => moreFunction()} 
         style={$favoriteButton}/>
       }
-      content={`Month average: ${episode}`}
+      content={`Month average: ${monthName}`}
     />
   )
 })
@@ -294,8 +258,8 @@ const $favoriteButton: ViewStyle = {
   borderRadius: 17,
   marginTop: spacing.xs,
   justifyContent: "flex-start",
-  backgroundColor: colors.palette.neutral300,
-  borderColor: colors.palette.neutral300,
+  backgroundColor: colors.palette.primary500,
+  borderColor: colors.palette.primary500,
   paddingHorizontal: spacing.md,
   paddingTop: spacing.xxxs,
   paddingBottom: 0,
