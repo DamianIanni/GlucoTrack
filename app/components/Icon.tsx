@@ -107,10 +107,11 @@ export const iconRegistry = {
   slack: require("../../assets/icons/demo/slack.png"),
   view: require("../../assets/icons/view.png"),
   x: require("../../assets/icons/x.png"),
-  edit_text: require("../../assets/icons/editar-texto.png"),
+  edit: require("../../assets/icons/edit.png"),
   user: require("../../assets/icons/user.png"),
   calendar: require("../../assets/icons/calendario.png"),
-  clock: require("../../assets/icons/clock.png")
+  clock: require("../../assets/icons/clock.png"),
+  bin: require("../../assets/icons/basura.png")
 }
 
 const $imageStyleBase: ImageStyle = {

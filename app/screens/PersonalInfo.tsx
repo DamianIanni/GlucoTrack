@@ -59,7 +59,7 @@ export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function Dem
       function PasswordRightAccessory(props: TextFieldAccessoryProps) {
         return (
           <Icon
-            icon={"edit_text"}
+            icon={"edit"}
             color={colors.palette.neutral800}
             containerStyle={props.style}
             size={35}

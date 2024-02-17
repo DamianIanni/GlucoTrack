@@ -14,7 +14,6 @@ const openRealm = () => {
   }
 };
 
-
 // Función para cerrar la instancia de Realm
 const closeRealm = () => {
   if (realm) {
@@ -22,6 +21,66 @@ const closeRealm = () => {
     realm = null;
   }
 };
+
+export const getMonth = () => {
+  return {
+    monthName: "February",
+    days: [
+      {
+        number: 1,
+        registers: [
+          {
+            timestamp: "2024-01-01T08:00:00Z",
+            value: 120,
+          },
+          {
+            timestamp: "2024-01-01T12:30:00Z",
+            value: 110,
+          },
+        ],
+      },
+      {
+        number: 2,
+        registers: [
+          {
+            timestamp: "2024-01-02T09:15:00Z",
+            value: 105,
+          },
+        ],
+      },
+      {
+        number: 3,
+        registers: [],
+      },
+      {
+        number: 4,
+        registers: [
+          {
+            timestamp: "2024-01-04T07:45:00Z",
+            value: 115,
+          },
+          {
+            timestamp: "2024-01-04T14:20:00Z",
+            value: 125,
+          },
+        ],
+      },
+      {
+        number: 5,
+        registers: [
+          {
+            timestamp: "2024-01-04T07:45:00Z",
+            value: 115,
+          },
+          {
+            timestamp: "2024-01-04T14:20:00Z",
+            value: 125,
+          },
+        ],
+      },
+    ],
+  }
+} 
 
 export const createMonths = (months) => {
   // try {
@@ -47,7 +106,7 @@ export const createMonths = (months) => {
           console.log(`Se ha creado el mes ${nombreMes}.`);
           agregarDiasAlMesExistente(nombreMes);
         } else {
-          console.log(`El mes ${nombreMes} ya existe en la base de datos.`);
+          // console.log(`El mes ${nombreMes} ya existe en la base de datos.`);
         }
       });
     });
@@ -83,6 +142,51 @@ export const logMonthDetails = (monthName) => {
     closeRealm(); // Close the Realm instance
   }
 };
+
+export const getSelectedDay = (monthName, dayNumber) => {
+  let selectedDayRegisters
+  try {
+    openRealm(); // Open the Realm instance
+    const selectedMonth = filterMonths(monthName)
+    const selectedDay = filterDays(selectedMonth, dayNumber)
+    if (selectedDay) {
+      selectedDayRegisters = parseRealmObj(selectedDay) 
+    }
+    return selectedDayRegisters
+  } catch (error) {
+    console.error("Error retrieving selected month:", error);
+    return null;
+  } finally {
+    closeRealm(); // Close the Realm instance
+  }
+};
+
+const filterDays = (month, dayNumber) => {
+  try {
+  const day = month.days.find(day => day.number === dayNumber);
+  return day
+  } catch (error) {
+    console.log("ERROR FILTERING DAY", error);
+  }
+}
+
+const filterMonths = (monthName) => {
+  try {
+  const month = realm.objects('Month').filtered('monthName = $0', monthName)[0];
+  return month
+  } catch (error) {
+    console.log("ERROR FILTERING MONTH", error);
+  }
+}
+
+const parseRealmObj = (obj) => {
+  try {
+    const parsedObj = JSON.parse(JSON.stringify(obj));
+    return parsedObj
+  } catch (error) {
+    console.log("ERROR PARSING", error);
+  }
+}
 
 const obtenerODia = () => {
   return realm.create('Day', { registers: [] });
@@ -122,3 +226,11 @@ const agregarDiasAlMesExistente = (nombreMesEnIngles) => {
     console.log(`El mes ${mesesEnIngles[indiceMes]} no existe en la base de datos.`);
   }
 };
+
+
+
+
+
+
+
+

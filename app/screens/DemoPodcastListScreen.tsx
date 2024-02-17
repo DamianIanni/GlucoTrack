@@ -49,8 +49,6 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
     ]
     
     createMonths(monthsArray)
-    // useEffect(() => {
-    // },[])
 
     return (
       <Screen
@@ -82,18 +80,11 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
 const EpisodeCard = observer(function EpisodeCard({
   monthName,
   numberIndex
-}: // isFavorite,
-// onPressFavorite,
+}:
 {
   monthName: string,
   numberIndex: any
-  // onPressFavorite: () => void
-  // isFavorite: string
 }) {
-  // console.log("EPISODE", JSON.stringify(episode, null, 4));
-
-  // const liked = useSharedValue(isFavorite ? 1 : 0)
-
   const imageUri = useMemo<ImageSourcePropType>(() => {
     return rnrImages[Math.floor(Math.random() * rnrImages.length)]
   }, [])
@@ -145,7 +136,7 @@ const EpisodeCard = observer(function EpisodeCard({
 
   const handlePressCard = () => {
     // console.log("LAS PROPS", JSON.stringify(props, null, 3));
-    navigate("AddValuesScreen", JSON.stringify(objDate))
+    navigate("HandleValuesScreen", JSON.stringify(objDate))
   }
 
   // const ButtonLeftAccessory: ComponentType<ButtonAccessoryProps> = useMemo(
@@ -191,7 +182,6 @@ const EpisodeCard = observer(function EpisodeCard({
         </View>
       }
       RightComponent={
-        // Custom component
         <Button text="+More" onPress={() => moreFunction()} 
         style={$favoriteButton}/>
       }

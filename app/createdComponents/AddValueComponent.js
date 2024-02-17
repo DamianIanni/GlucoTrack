@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { CombinedButtons } from "./CombinedButtons";
 import useScreenDimensions from "app/utils/screenDimensions";
 import { TextInput } from "react-native";
 import { View } from "react-native";
-import { Text, TextField, Icon } from "app/components";
+import { Text, TextField, Icon, Button } from "app/components";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { colors } from "app/theme";
+import { colors, spacing } from "app/theme";
 
 
 
@@ -15,6 +14,8 @@ export const AddValuesComponent = (props) => {
     const [bloodSugar, setBloodSugar] = useState(0)
     const screenDimensions = useScreenDimensions()
 
+    console.log("PROPS OF ADDING COMPONENT", props.cancelAction);
+
     const style = {
         main_container: {
             backgroundColor: "white",
@@ -23,7 +24,11 @@ export const AddValuesComponent = (props) => {
             width: "100%",
             marginTop: 10,
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "center",
+            borderColor: colors.background,
+            borderWidth: 1,
+            elevation: 1
+            // paddingHorizontal: spacing.lg
         },
         inputTextView: {
             flexDirection: "column",
@@ -45,6 +50,8 @@ export const AddValuesComponent = (props) => {
             paddingBottom: 10,
             justifyContent: "flex-start",
             alignItems: "flex-start",
+            // paddingHorizontal: spacing.lg,
+            // backgroundColor: "red"
         },
         action_container: {
             flexDirection: "row",
@@ -52,20 +59,38 @@ export const AddValuesComponent = (props) => {
             justifyContent: "flex-start",
             alignItems: "center",
             marginTop: 16,
-            marginBottom: 16
+            marginBottom: 16,
             // backgroundColor: "red"
+        },
+        main_container_buttons: {
+            width: "70%",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around"
+        },
+        buttons: {
+            borderRadius: 22,
+            backgroundColor: colors.palette.primary500,
+            borderColor: colors.palette.primary500,
+            paddingHorizontal: spacing.md,
+            paddingTop: spacing.xxxs,
+            paddingBottom: 0,
+            minHeight: 32,
+            alignSelf: "center",
+            justifyContent: "center",
+            width: 110
         }
     }
 
-    const showDatePicker = () => {
+    function showDatePicker() {
         setDatePickerVisibility(true);
     };
 
-    const hideDatePicker = () => {
+    function hideDatePicker() {
         setDatePickerVisibility(false);
     };
 
-    const handleConfirm = (date) => {
+    function handleConfirm(date) {
         const onlyTime = getTimeFromDate(date)
         setDateToUse(onlyTime)
         hideDatePicker();
@@ -77,18 +102,20 @@ export const AddValuesComponent = (props) => {
         return `${hours}:${minutes}`;
     }
 
-    const handleBloodSugarValue = (value) => {
+    function handleBloodSugarValue(value) {
         setBloodSugar(value)
     }
- 
-    return (
-        <View style={style.main_container}>
-            <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="time"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-            />
+
+    function handleSave() {
+        props.saveAction()
+    }
+
+    function handleCancel() {
+        props.cancelAction()
+    }
+
+    const AddComp = () => {
+        return (
             <View style={style.addValueElementsView}>
                 <View style={style.inputTextView}>
                     <Text tx="addValueScreen.inputsAddValues._time" style={style.textNextToValue} />
@@ -107,10 +134,25 @@ export const AddValuesComponent = (props) => {
                         color: "orange",
                         marginRight: 16
                     }} />
-                    <TextField inputMode="numeric" containerStyle={style.textFieldForValue} value={bloodSugar} onChange={(value) => handleBloodSugarValue(value)}/>
+                    <TextField inputMode="numeric" containerStyle={style.textFieldForValue} value={bloodSugar} onChange={(value) => handleBloodSugarValue(value)} />
                 </View>
             </View>
-            <CombinedButtons cancelAction={() => props.cancelAction()} />
+        )
+    }
+
+    return (
+        <View style={style.main_container}>
+            <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="time"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+            />
+            <AddComp />
+            <View style={style.main_container_buttons}>
+                <Button style={style.buttons} text="Save" onPress={() => handleSave()} />
+                <Button style={style.buttons} text="Cancel" onPress={() => handleCancel()} />
+            </View>
         </View>
     )
 }

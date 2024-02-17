@@ -20,7 +20,7 @@ import { useStores } from "../models"
 import { DemoNavigator, DemoTabParamList } from "./DemoNavigator"
 import { navigationRef, useBackButtonHandler, navigate } from "./navigationUtilities"
 import { colors } from "app/theme"
-import AddValuesScreen from "app/screens/AddValuesScreen"
+import HandleValuesScreen from "app/screens/HandleValuesScreen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -39,7 +39,7 @@ export type AppStackParamList = {
   Welcome: undefined
   Login: undefined
   Demo: NavigatorScreenParams<DemoTabParamList>
-  AddValuesScreen: NavigatorScreenParams<DemoTabParamList>
+  HandleValuesScreen: NavigatorScreenParams<DemoTabParamList>
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
@@ -79,7 +79,7 @@ const AppStack = observer(function AppStack() {
           <Stack.Screen name="Login" component={Screens.LoginScreen} />
         </>
       )}
-      <Stack.Screen name="AddValuesScreen" component={AddValuesScreen} />
+      <Stack.Screen name="HandleValuesScreen" component={HandleValuesScreen} />
       {/** 🔥 Your screens go here */}
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
