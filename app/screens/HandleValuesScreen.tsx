@@ -4,7 +4,13 @@ import { View, ViewStyle } from "react-native"
 import { goBack, navigate } from "app/navigators"
 import { Calendar } from "react-native-calendars"
 import ShowValues from "../createdComponents/ShowValues"
-import { logMonthDetails, getMonth, getSelectedDay } from "../realmModel/useRealmModels"
+import {
+  logMonthDetails,
+  getMonth,
+  getSelectedDay,
+  pushRegisterToSelectedDay,
+  deleteSelectedDaySpecificRegister,
+} from "../realmModel/useRealmModels"
 import { colors, spacing } from "app/theme"
 import { AddValuesComponent } from "app/createdComponents/AddValueComponent"
 
@@ -22,8 +28,10 @@ const HandleValuesScreen: React.FC<HandleValuesScreen> = (props) => {
   const [selectedDay, setSelectedDay] = useState(returnSelectedDay())
   const [registersOfTheDay, setRegistersOfTheDay] = useState(registersOfDayAsComponentMount())
   const [inActualMonth, setInActualMonth] = useState(isActualMonth())
+  const [dayToPush, setDayToPush] = useState(registersOfDayAsComponentMount().number)
+  const [indexUsed, setIndexUsed] = useState(null)
   // logMonthDetails(parsedMonth.monthName)
-  const mockedMonth = getMonth()
+  // const mockedMonth = getMonth()
 
   const AddValueComponent = () => {
     // tx="addValueScreen.inputsAddValues.add_value"
@@ -63,16 +71,31 @@ const HandleValuesScreen: React.FC<HandleValuesScreen> = (props) => {
     return `${year}-${month}-${day}`
   }
 
+  function deleteAction(indexToDelete: any) {
+    deleteSelectedDaySpecificRegister(parsedMonth.monthName, dayToPush, indexToDelete)
+    handleSelectedDay(dayToPush, selectedDay)
+  }
+
   function cancelAction() {
+    setIndexUsed(null)
     if (editValue) {
       setEditValue(false)
     }
     setAddingValue(false)
   }
 
-  function saveAction() {}
+  function saveAction(data: any) {
+    pushRegisterToSelectedDay(parsedMonth.monthName, dayToPush, data, indexUsed)
+    if (editValue) {
+      setEditValue(false)
+    }
+    setAddingValue(false)
+    setIndexUsed(null)
+    handleSelectedDay(dayToPush, selectedDay)
+  }
 
-  function changeEditState() {
+  function changeEditState(indexToEdit: any) {
+    setIndexUsed(indexToEdit)
     setEditValue(true)
     setAddingValue(true)
   }
@@ -96,6 +119,7 @@ const HandleValuesScreen: React.FC<HandleValuesScreen> = (props) => {
     const _dateString = dateString
     const _day = day
     setSelectedDay(_dateString)
+    setDayToPush(_day)
     try {
       const daySelectedData = getSelectedDay(parsedMonth.monthName, _day)
       setRegistersOfTheDay(daySelectedData)
@@ -110,6 +134,9 @@ const HandleValuesScreen: React.FC<HandleValuesScreen> = (props) => {
     const dayRegisters = getSelectedDay(parsedMonth.monthName, day)
     return dayRegisters
   }
+
+  // useEffect(() => {
+  // }, [])
 
   return (
     <Screen preset="fixed" safeAreaEdges={[]} contentContainerStyle={$screenContentContainer}>
@@ -139,22 +166,25 @@ const HandleValuesScreen: React.FC<HandleValuesScreen> = (props) => {
           },
         }}
         onDayPress={(day) => {
+          cancelAction()
           setInActualMonth(true)
           handleSelectedDay(day.day, day.dateString)
         }}
       />
       {!addingValue ? (
         <ShowValues
-          changeEditState={() => changeEditState()}
-          registersOfTheDay={registersOfTheDay}
+          changeEditState={changeEditState}
+          registersOfTheDay={registersOfTheDay ? registersOfTheDay : {}}
           actualMonth={inActualMonth}
+          deleteAction={deleteAction}
         />
       ) : (
         <AddValuesComponent
+          indexToEdit={indexUsed}
           onEdit={editValue}
           cancelAction={() => cancelAction()}
-          saveAction={() => saveAction()}
-          month={mockedMonth}
+          saveAction={saveAction}
+          day={registersOfTheDay}
         />
       )}
     </Screen>

@@ -161,6 +161,46 @@ export const getSelectedDay = (monthName, dayNumber) => {
   }
 };
 
+export const pushRegisterToSelectedDay = (monthName, dayNumber, data, indexUsed) => {
+  // console.log("DATA TO PUSH", data, indexUsed);
+  try {
+    openRealm(); // Open the Realm instance
+    const selectedMonth = filterMonths(monthName)
+    const selectedDay = filterDays(selectedMonth, dayNumber)
+    realm.write(() => {
+      const selectedDay = filterDays(selectedMonth, dayNumber);
+      if (selectedDay) {
+        if (indexUsed) return selectedDay.registers.splice(indexUsed, 1, data)
+        selectedDay.registers.push(data);
+      }
+    });
+  } catch (error) {
+    console.error("Error pushing register to selected day:", error);
+    return null;
+  } finally {
+    closeRealm(); // Close the Realm instance
+  }
+}
+
+export const deleteSelectedDaySpecificRegister = (monthName, dayNumber, indexToDelete) => {
+  try {
+    openRealm(); // Open the Realm instance
+    const selectedMonth = filterMonths(monthName)
+    const selectedDay = filterDays(selectedMonth, dayNumber)
+    realm.write(() => {
+      const selectedDay = filterDays(selectedMonth, dayNumber);
+      if (selectedDay) {
+        selectedDay.registers.splice(indexToDelete, 1);
+      }
+    });
+  } catch (error) {
+    console.error("Error deleting register into selected day:", error);
+    return null;
+  } finally {
+    closeRealm(); // Close the Realm instance
+  }
+}
+
 const filterDays = (month, dayNumber) => {
   try {
   const day = month.days.find(day => day.number === dayNumber);

@@ -10,17 +10,27 @@ interface ShowValues {
   changeEditState: any
   registersOfTheDay: any
   actualMonth: any
+  deleteAction: any
 }
 
 const ShowValues: React.FC<ShowValues> = (props) => {
   const changeEditState = props.changeEditState
+  const deleteAction = props.deleteAction
   // console.log("PROPS PORP INSIDE", JSON.stringify(props, null, 3))
 
   const ValueComponent = (props: any) => {
     const numberOFValue = props.index
     const bloodSugarValue = props.item?.value
-    const time = getHoursFromDate(props.item.timestamp)
-    console.log("PROPS PORP INSIDE", JSON.stringify(props, null, 3))
+    const time = getHoursFromDate(props.item?.time)
+    // console.log("PROPS PORP INSIDE", JSON.stringify(props.index, null, 3))
+
+    function handleDelete() {
+      deleteAction(numberOFValue)
+    }
+
+    function handleEdit() {
+      changeEditState(numberOFValue)
+    }
 
     return (
       <View style={$addValueElementsView}>
@@ -41,8 +51,8 @@ const ShowValues: React.FC<ShowValues> = (props) => {
             </Text>
           </View>
           <View style={$buttonsContainer}>
-            <Icon icon={"edit"} size={24} onPress={changeEditState} />
-            <Icon icon={"bin"} size={26} />
+            <Icon icon={"edit"} size={24} onPress={() => handleEdit()} />
+            <Icon icon={"bin"} size={26} onPress={() => handleDelete()}/>
           </View>
         </View>
       </View>
@@ -53,8 +63,9 @@ const ShowValues: React.FC<ShowValues> = (props) => {
     <View>
       {props.actualMonth ? (
         <View style={$addValueContentView}>
-          {props.registersOfTheDay.registers.length > 0 ? (
+          {props.registersOfTheDay?.registers?.length > 0 ? (
             <ListView
+              showsVerticalScrollIndicator={false}
               contentContainerStyle={$listContentContainer}
               renderItem={ValueComponent}
               data={props.registersOfTheDay.registers}
