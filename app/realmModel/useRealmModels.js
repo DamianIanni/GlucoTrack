@@ -143,6 +143,24 @@ export const logMonthDetails = (monthName) => {
   }
 };
 
+export const getAverageOfTheMonth = (parameter, monthName) => {
+  let objArrWithAverage
+  let getAverageOfTheMonth
+  try {
+    openRealm();
+    const selectedMonth = filterMonths(monthName)
+    if (parameter === "day") {
+      objArrWithAverage = armArrOfAverages(parameter, selectedMonth)
+      return objArrWithAverage
+    }
+    return getAverageOfTheMonth = armArrOfAverages(parameter, selectedMonth)
+  } catch (error) {
+    console.log("EEROR CALCULATING THE AVERAGE");
+  } finally {
+    closeRealm();
+  }
+}
+
 export const getSelectedDay = (monthName, dayNumber) => {
   let selectedDayRegisters
   try {
@@ -199,6 +217,69 @@ export const deleteSelectedDaySpecificRegister = (monthName, dayNumber, indexToD
   } finally {
     closeRealm(); // Close the Realm instance
   }
+}
+
+const armArrOfAverages = (parameter, month) => {
+  console.log(parameter);
+  console.log(JSON.stringify(month, null, 2));
+  let obj = {}
+  let arrOfDayNumber = []
+  let arrOfAverages = []
+  let generalAverage
+  
+  month.days.map((item) => {
+    arrOfDayNumber.push(item.number.toString())
+    const averageToPush = averageDayCalculator(item.registers)
+    arrOfAverages.push(averageToPush)
+  })
+
+  if (parameter === "day") {
+    return obj = {
+      "arrOfDayNumber": arrOfDayNumber,
+      "arrOfAverages": arrOfAverages 
+    }
+  }
+
+  generalAverage = averageMonthCalculator(arrOfAverages)
+  return generalAverage
+}
+
+const averageMonthCalculator = (registers) => {
+  let average
+  let sumAllValues = 0
+  let divider = 0
+
+  if (registers.length <= 0) {
+    return average = false
+  }
+  registers.map((register) => {
+    if(register) {
+      sumAllValues = sumAllValues + register
+      divider++
+    }
+  })
+
+  average = sumAllValues / divider
+
+  return average
+}
+
+const averageDayCalculator = (registers) => {
+  let average
+  let sumAllValues = 0
+  let divider = 0
+
+  if (registers.length <= 0) {
+    return average = false
+  }
+  registers.map((register) => {
+    sumAllValues = sumAllValues + register.value
+    divider++
+  })
+
+  average = sumAllValues / divider
+
+  return average
 }
 
 const filterDays = (month, dayNumber) => {

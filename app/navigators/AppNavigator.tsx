@@ -21,6 +21,7 @@ import { DemoNavigator, DemoTabParamList } from "./DemoNavigator"
 import { navigationRef, useBackButtonHandler, navigate } from "./navigationUtilities"
 import { colors } from "app/theme"
 import HandleValuesScreen from "app/screens/HandleValuesScreen"
+import { MonthChartScreen } from "app/screens/MonthChartScreen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -40,6 +41,7 @@ export type AppStackParamList = {
   Login: undefined
   Demo: NavigatorScreenParams<DemoTabParamList>
   HandleValuesScreen: NavigatorScreenParams<DemoTabParamList>
+  MonthChartScreen: NavigatorScreenParams<DemoTabParamList>
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
@@ -80,6 +82,7 @@ const AppStack = observer(function AppStack() {
         </>
       )}
       <Stack.Screen name="HandleValuesScreen" component={HandleValuesScreen} />
+      <Stack.Screen name="MonthChartScreen" component={MonthChartScreen} />
       {/** 🔥 Your screens go here */}
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>

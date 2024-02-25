@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite"
-import React, { FC, useEffect, useMemo } from "react"
+import React, { FC } from "react"
 import {
-  ImageSourcePropType,
   ImageStyle,
   TextStyle,
   View,
@@ -17,19 +16,13 @@ import {
   Text,
 } from "../components"
 import { isRTL, translate } from "../i18n"
-import { useStores } from "../models"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { colors, spacing } from "../theme"
 // import { delay } from "../utils/delay"
 import {navigate} from "../navigators/navigationUtilities"
-import { createMonths } from "app/realmModel/useRealmModels"
+import { createMonths, getAverageOfTheMonth } from "app/realmModel/useRealmModels"
 
 const ICON_SIZE = 14
-
-const rnrImage1 = require("../../assets/images/demo/rnr-image-1.png")
-const rnrImage2 = require("../../assets/images/demo/rnr-image-2.png")
-const rnrImage3 = require("../../assets/images/demo/rnr-image-3.png")
-const rnrImages = [rnrImage1, rnrImage2, rnrImage3]
 
 export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = observer(
   function DemoPodcastListScreen(_props) {
@@ -85,86 +78,22 @@ const EpisodeCard = observer(function EpisodeCard({
   monthName: string,
   numberIndex: any
 }) {
-  const imageUri = useMemo<ImageSourcePropType>(() => {
-    return rnrImages[Math.floor(Math.random() * rnrImages.length)]
-  }, [])
 
-  const moreFunction = () => {
-    console.log("MORE")
-  }
+  const averageToShow = (getAverageOfTheMonth("month", monthName))
+  // console.log("TO SHOW", averageToShow);
 
   const objDate = {
     monthName: monthName,
     numberIndex: `${numberIndex}`
   }
 
-  /**
-   * Android has a "longpress" accessibility action. iOS does not, so we just have to use a hint.
-   * @see https://reactnative.dev/docs/accessibility#accessibilityactions
-   */
-  // const accessibilityHintProps = useMemo(
-  //   () =>
-  //     Platform.select<AccessibilityProps>({
-  //       ios: {
-  //         accessibilityLabel: episode.title,
-  //         accessibilityHint: translate("demoPodcastListScreen.accessibility.cardHint", {
-  //           action: isFavorite ? "unfavorite" : "favorite",
-  //         }),
-  //       },
-  //       android: {
-  //         accessibilityLabel: episode.title,
-  //         accessibilityActions: [
-  //           {
-  //             name: "longpress",
-  //             label: translate("demoPodcastListScreen.accessibility.favoriteAction"),
-  //           },
-  //         ],
-  //         onAccessibilityAction: ({ nativeEvent }) => {
-  //           if (nativeEvent.actionName === "longpress") {
-  //             handlePressFavorite()
-  //           }
-  //         },
-  //       },
-  //     }),
-  //   [episode, isFavorite],
-  // )
-
-  // const handlePressFavorite = () => {
-  //   onPressFavorite()
-  //   liked.value = withSpring(liked.value ? 0 : 1)
-  // }
-
-  const handlePressCard = () => {
-    // console.log("LAS PROPS", JSON.stringify(props, null, 3));
-    navigate("HandleValuesScreen", JSON.stringify(objDate))
+  const moreFunction = () => {
+    navigate("MonthChartScreen", JSON.stringify(objDate))
   }
 
-  // const ButtonLeftAccessory: ComponentType<ButtonAccessoryProps> = useMemo(
-  //   () =>
-  //     function ButtonLeftAccessory() {
-  //       return (
-  //         <View>
-  //           <Animated.View
-  //             style={[$iconContainer, StyleSheet.absoluteFill, animatedLikeButtonStyles]}
-  //           >
-  //             <Icon
-  //               icon="heart"
-  //               size={ICON_SIZE}
-  //               color={colors.palette.neutral800} // dark grey
-  //             />
-  //           </Animated.View>
-  //           <Animated.View style={[$iconContainer, animatedUnlikeButtonStyles]}>
-  //             <Icon
-  //               icon="heart"
-  //               size={ICON_SIZE}
-  //               color={colors.palette.primary400} // pink
-  //             />
-  //           </Animated.View>
-  //         </View>
-  //       )
-  //     },
-  //   [],
-  // )
+  const handlePressCard = () => {
+    navigate("HandleValuesScreen", JSON.stringify(objDate))
+  }
 
   return (
     <Card
@@ -182,10 +111,10 @@ const EpisodeCard = observer(function EpisodeCard({
         </View>
       }
       RightComponent={
-        <Button text="+More" onPress={() => moreFunction()} 
+        <Button text="Chart" onPress={() => moreFunction()} 
         style={$favoriteButton}/>
       }
-      content={`Month average: ${monthName}`}
+      content={`Month average: ${averageToShow ? Math.round(averageToShow) : "No values" }`}
     />
   )
 })
@@ -242,6 +171,7 @@ const $metadataText: TextStyle = {
   color: colors.textDim,
   marginEnd: spacing.md,
   marginBottom: spacing.xs,
+  fontWeight: "bold"
 }
 
 const $favoriteButton: ViewStyle = {
