@@ -4,6 +4,7 @@ import { Text, ListView, Icon } from "app/components"
 import { colors, spacing } from "app/theme"
 import { ContentStyle } from "@shopify/flash-list"
 import getHoursFromDate from "app/utils/mineFormatDate"
+import { useColor } from "app/theme/ColorProvider"
 
 interface ShowValues {
   // Add any props you might use in your component
@@ -16,13 +17,12 @@ interface ShowValues {
 const ShowValues: React.FC<ShowValues> = (props) => {
   const changeEditState = props.changeEditState
   const deleteAction = props.deleteAction
-  // console.log("PROPS PORP INSIDE", JSON.stringify(props, null, 3))
+  const { colorsProvider } = useColor()
 
   const ValueComponent = (props: any) => {
     const numberOFValue = props.index
     const bloodSugarValue = props.item?.value
     const time = getHoursFromDate(props.item?.time)
-    // console.log("PROPS PORP INSIDE", JSON.stringify(props.index, null, 3))
 
     function handleDelete() {
       deleteAction(numberOFValue)
@@ -34,25 +34,39 @@ const ShowValues: React.FC<ShowValues> = (props) => {
 
     return (
       <View style={$addValueElementsView}>
-        <View style={$allContainer}>
-          <View style={$inputTextView}>
+        <View
+          style={{
+            ...$allContainer,
+            // backgroundColor: `${colorsProvider.palette.primary500}80`,
+            // borderColor: `${colorsProvider.palette.primary500}4D`,
+            // shadowColor: `${colorsProvider.palette.primary500}4D`,
+          }}
+        >
+          <View style={{...$inputTextView, borderRightColor: colorsProvider.palette.primary500}}>
             <Text size={"lg"} style={$textNextToValue}>
               <Text size={"lg"} style={{ fontWeight: "bold" }}>
                 {numberOFValue + 1}-
               </Text>
               {"  "}
-              <Text size={"lg"} style={$highlightedText}>
+              <Text
+                size={"lg"}
+                style={{ ...$highlightedText, color: colorsProvider.palette.primary500 }}
+              >
                 {bloodSugarValue}
-              </Text>{" "}
-              at{" "}
-              <Text size={"lg"} style={$highlightedText}>
+              </Text>
+              <Text style={{color: colorsProvider.palette.primary500, fontWeight: "bold"}}> mg/dL  </Text>
+              <Text tx="addValueScreen.inputsAddValues.actualValueText" />{" "}
+              <Text
+                size={"lg"}
+                style={{ ...$highlightedText, color: colorsProvider.palette.primary500 }}
+              >
                 {time}
               </Text>
             </Text>
           </View>
           <View style={$buttonsContainer}>
             <Icon icon={"edit"} size={24} onPress={() => handleEdit()} />
-            <Icon icon={"bin"} size={26} onPress={() => handleDelete()}/>
+            <Icon icon={"bin"} size={26} onPress={() => handleDelete()} />
           </View>
         </View>
       </View>
@@ -73,14 +87,20 @@ const ShowValues: React.FC<ShowValues> = (props) => {
             />
           ) : (
             <View style={$noRegistersContainer}>
-              <Text style={$noRegistersText} text="No registers for this day" />
+              <Text
+                style={{ ...$noRegistersText, color: colorsProvider.palette.primary500 }}
+                tx="showValuesScreen.noRegister"
+              />
             </View>
           )}
         </View>
       ) : (
         <View style={$addValueContentView}>
           <View style={$noRegistersContainer}>
-            <Text style={$noRegistersText} text="Select a day" />
+            <Text
+              style={{ ...$noRegistersText, color: colorsProvider.palette.primary500 }}
+              tx="showValuesScreen.selectADay"
+            />
           </View>
         </View>
       )}
@@ -112,7 +132,7 @@ const $allContainer: ViewStyle = {
   shadowOffset: { width: 0, height: 12 },
   shadowOpacity: 0.08,
   shadowRadius: 12.81,
-  elevation: 1.5,
+  elevation: 1,
 }
 
 const $noRegistersContainer: ViewStyle = {
@@ -131,17 +151,16 @@ const $buttonsContainer: ViewStyle = {
   // marginTop: 2,
   // marginBottom: 2,
   paddingHorizontal: spacing.xs,
-  paddingLeft: spacing.xxxl + spacing.md,
+  // paddingLeft: spacing.xxxl + spacing.md,
   // backgroundColor: "lightblue",
   justifyContent: "space-around",
   alignItems: "center",
   height: 56,
-  width: "50%",
+  width: "30%",
 }
 
 const $highlightedText: TextStyle = {
   fontWeight: "bold",
-  color: "orange",
 }
 
 const $addValueElementsView: ViewStyle = {
@@ -153,13 +172,15 @@ const $addValueElementsView: ViewStyle = {
 
 const $inputTextView: ViewStyle = {
   flexDirection: "row",
-  // marginTop: 2,
+  paddingTop: "2%",
   // marginBottom: 2,
   // backgroundColor: "violet",
   justifyContent: "center",
   alignItems: "center",
   height: 56,
-  width: "50%",
+  width: "70%",
+  borderRightWidth: 4,
+  
 }
 
 const $addValueContentView: ViewStyle = {

@@ -1,26 +1,16 @@
 import { observer } from "mobx-react-lite"
 import React, { FC } from "react"
-import {
-  ImageStyle,
-  TextStyle,
-  View,
-  ViewStyle,
-} from "react-native"
+import { ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 import { type ContentStyle } from "@shopify/flash-list"
 
-import {
-  Button,
-  Card,
-  ListView,
-  Screen,
-  Text,
-} from "../components"
+import { Button, Card, ListView, Screen, Text } from "../components"
 import { isRTL, translate } from "../i18n"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { colors, spacing } from "../theme"
 // import { delay } from "../utils/delay"
-import {navigate} from "../navigators/navigationUtilities"
+import { navigate } from "../navigators/navigationUtilities"
 import { createMonths, getAverageOfTheMonth } from "app/realmModel/useRealmModels"
+import { useColor } from "app/theme/ColorProvider"
 
 const ICON_SIZE = 14
 
@@ -40,7 +30,7 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
       "November",
       "December",
     ]
-    
+
     createMonths(monthsArray)
 
     return (
@@ -58,12 +48,7 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
               <Text preset="heading" tx="demoPodcastListScreen.title" />
             </View>
           }
-          renderItem={({ item, index }) => (
-            <EpisodeCard
-              monthName={item}
-              numberIndex={index}
-            />
-          )}
+          renderItem={({ item, index }) => <EpisodeCard monthName={item} numberIndex={index} />}
         />
       </Screen>
     )
@@ -72,19 +57,18 @@ export const DemoPodcastListScreen: FC<DemoTabScreenProps<"DemoPodcastList">> = 
 
 const EpisodeCard = observer(function EpisodeCard({
   monthName,
-  numberIndex
-}:
-{
-  monthName: string,
+  numberIndex,
+}: {
+  monthName: string
   numberIndex: any
 }) {
-
-  const averageToShow = (getAverageOfTheMonth("month", monthName))
+  const averageToShow = getAverageOfTheMonth("month", monthName)
+  const { colorsProvider } = useColor()
   // console.log("TO SHOW", averageToShow);
 
   const objDate = {
     monthName: monthName,
-    numberIndex: `${numberIndex}`
+    numberIndex: `${numberIndex}`,
   }
 
   const moreFunction = () => {
@@ -102,19 +86,34 @@ const EpisodeCard = observer(function EpisodeCard({
       onPress={handlePressCard}
       HeadingComponent={
         <View style={$metadata}>
-          <Text
-            style={$metadataText}
-            size="xl"
-          >
+          <Text style={$metadataText} size="xl">
             {monthName}
           </Text>
         </View>
       }
       RightComponent={
-        <Button text="Chart" onPress={() => moreFunction()} 
-        style={$favoriteButton}/>
+        <Button
+          tx="demoPodcastListScreen.chart"
+          onPress={() => moreFunction()}
+          style={{
+            ...$favoriteButton,
+            backgroundColor: colorsProvider.palette.primary500,
+            borderColor: colorsProvider.palette.primary500,
+          }}
+        />
       }
-      content={`Month average: ${averageToShow ? Math.round(averageToShow) : "No values" }`}
+      content={
+        <Text>
+          <Text tx="demoPodcastListScreen.monthAverage" />
+          {averageToShow ? (
+            <Text style={{ fontWeight: "bold", color: colorsProvider.palette.primary500 }}>
+              {Math.round(averageToShow)} mg/dL
+            </Text>
+          ) : (
+            <Text tx="demoPodcastListScreen.noValues" />
+          )}
+        </Text>
+      }
     />
   )
 })
@@ -140,27 +139,6 @@ const $item: ViewStyle = {
   minHeight: 120,
 }
 
-const $itemThumbnail: ImageStyle = {
-  marginTop: spacing.sm,
-  borderRadius: 50,
-  alignSelf: "flex-start",
-}
-
-const $toggle: ViewStyle = {
-  marginTop: spacing.md,
-}
-
-const $labelStyle: TextStyle = {
-  textAlign: "left",
-}
-
-const $iconContainer: ViewStyle = {
-  height: ICON_SIZE,
-  width: ICON_SIZE,
-  flexDirection: "row",
-  marginEnd: spacing.sm,
-}
-
 const $metadata: TextStyle = {
   color: colors.textDim,
   marginTop: spacing.xs,
@@ -171,32 +149,17 @@ const $metadataText: TextStyle = {
   color: colors.textDim,
   marginEnd: spacing.md,
   marginBottom: spacing.xs,
-  fontWeight: "bold"
+  fontWeight: "bold",
 }
 
 const $favoriteButton: ViewStyle = {
   borderRadius: 17,
   marginTop: spacing.xs,
   justifyContent: "flex-start",
-  backgroundColor: colors.palette.primary500,
-  borderColor: colors.palette.primary500,
   paddingHorizontal: spacing.md,
   paddingTop: spacing.xxxs,
   paddingBottom: 0,
   minHeight: 32,
   alignSelf: "flex-start",
-}
-
-const $unFavoriteButton: ViewStyle = {
-  borderColor: colors.palette.primary100,
-  backgroundColor: colors.palette.primary100,
-}
-
-const $emptyState: ViewStyle = {
-  marginTop: spacing.xxl,
-}
-
-const $emptyStateImage: ImageStyle = {
-  transform: [{ scaleX: isRTL ? -1 : 1 }],
 }
 // #endregion

@@ -36,6 +36,14 @@ const palette: Record<string, string> = {
 
   overlay20: "rgba(25, 16, 21, 0.2)",
   overlay50: "rgba(25, 16, 21, 0.5)",
+
+  mainColor100: '#FF6347', // Tomato
+  mainColor200: '#4682B4', // Steel Blue
+  mainColor300: '#32CD32', // Lime Green
+  mainColor400: '#FFD700', // Gold
+  mainColor500:'#8A2BE2', // Blue Violet
+  mainColor600: '#FFA500', // Orange
+  mainColor700: '#00FFFF', // Cyan
 } as const
 
 export const colors = {
@@ -82,4 +90,5 @@ export const colors = {
    *
    */
   errorBackground: palette.angry100,
+  black: palette.neutral900
 }

@@ -104,6 +104,9 @@ const en = {
     onlyFavorites: "Only Show Favorites",
     favoriteButton: "Favorite",
     unfavoriteButton: "Unfavorite",
+    monthAverage: "Month average: ",
+    chart: "Chart",
+    noValues: "no values",
     accessibility: {
       cardHint:
         "Double tap to listen to the episode. Double tap and hold to {{action}} this episode.",
@@ -122,11 +125,24 @@ const en = {
   },
   addValueScreen: {
     inputsAddValues: {
-      add_value: "Add value",
-      _time: "Select the time you measured your blood sugar",
-      _value: "and enter the value of that measurement !",
-      _actualValueText: "at"
+      add_value: "+Value",
+      _time: "Time: ",
+      _select: "Select a ",
+      _enterAValue: "Enter a value: ",
+      actualValueText: "at",
     }
+  },
+  showValuesScreen: {
+    noRegister: "No registers for this day",
+    selectADay: "Select a day"
+  },
+  chartScreen: {
+    averageDayValue: "Average day value: "
+  },
+  personalInfo: {
+    chooseColor: "Color",
+    name: "Name",
+    colorHelp: "Choose a color for the app"
   }
 }
 

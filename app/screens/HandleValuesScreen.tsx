@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Header, Icon, Screen, Button } from "../components"
 import { View, ViewStyle } from "react-native"
-import { goBack, navigate } from "app/navigators"
+import { navigate } from "app/navigators"
 import { Calendar } from "react-native-calendars"
 import ShowValues from "../createdComponents/ShowValues"
 import {
-  logMonthDetails,
-  getMonth,
   getSelectedDay,
   pushRegisterToSelectedDay,
   deleteSelectedDaySpecificRegister,
 } from "../realmModel/useRealmModels"
 import { colors, spacing } from "app/theme"
 import { AddValuesComponent } from "app/createdComponents/AddValueComponent"
+import { useColor } from "app/theme/ColorProvider"
 
 // Define the type for the component props (if any)
 interface HandleValuesScreen {
@@ -30,8 +29,7 @@ const HandleValuesScreen: React.FC<HandleValuesScreen> = (props) => {
   const [inActualMonth, setInActualMonth] = useState(isActualMonth())
   const [dayToPush, setDayToPush] = useState(registersOfDayAsComponentMount().number)
   const [indexUsed, setIndexUsed] = useState(null)
-  // logMonthDetails(parsedMonth.monthName)
-  // const mockedMonth = getMonth()
+  const {colorsProvider} = useColor()
 
   const AddValueComponent = () => {
     // tx="addValueScreen.inputsAddValues.add_value"
@@ -39,8 +37,10 @@ const HandleValuesScreen: React.FC<HandleValuesScreen> = (props) => {
       <View style={$addValueView}>
         {inActualMonth && (
           <Button
-            style={$buttonAddValue}
-            text="+Value"
+            style={{...$buttonAddValue,
+              backgroundColor: colorsProvider.palette.primary500,
+  borderColor: colorsProvider.palette.primary500,}}
+            tx="addValueScreen.inputsAddValues.add_value"
             onPress={() => setAddingValue(true)}
             disabled={!inActualMonth}
           />
@@ -51,6 +51,15 @@ const HandleValuesScreen: React.FC<HandleValuesScreen> = (props) => {
 
   function goBackToMonths() {
     navigate("Demo")
+    setTimeout(() => {
+      setAddingValue(false);
+      setEditValue(false);
+      setSelectedDay(returnSelectedDay());
+      setRegistersOfTheDay(registersOfDayAsComponentMount());
+      setInActualMonth(isActualMonth());
+      setDayToPush(registersOfDayAsComponentMount().number);
+      setIndexUsed(null);
+    }, 500);
   }
 
   function setDateToMonth(monthNumber: number) {
@@ -86,6 +95,8 @@ const HandleValuesScreen: React.FC<HandleValuesScreen> = (props) => {
 
   function saveAction(data: any) {
     pushRegisterToSelectedDay(parsedMonth.monthName, dayToPush, data, indexUsed)
+    console.log("EDIT VALUE", editValue);
+    
     if (editValue) {
       setEditValue(false)
     }
@@ -135,9 +146,6 @@ const HandleValuesScreen: React.FC<HandleValuesScreen> = (props) => {
     return dayRegisters
   }
 
-  // useEffect(() => {
-  // }, [])
-
   return (
     <Screen preset="fixed" safeAreaEdges={[]} contentContainerStyle={$screenContentContainer}>
       <Header
@@ -156,10 +164,10 @@ const HandleValuesScreen: React.FC<HandleValuesScreen> = (props) => {
           [selectedDay]: {
             customStyles: {
               container: {
-                backgroundColor: "orange",
+                backgroundColor: colorsProvider.palette.primary500,
               },
               text: {
-                color: "black",
+                color: colors.black,
                 fontWeight: "bold",
               },
             },
@@ -222,8 +230,6 @@ const $addValueView: ViewStyle = {
 }
 
 const $buttonAddValue: ViewStyle = {
-  backgroundColor: colors.palette.primary500,
-  borderColor: colors.palette.primary500,
   borderRadius: 17,
   // marginTop: spacing.xs,
   justifyContent: "flex-start",

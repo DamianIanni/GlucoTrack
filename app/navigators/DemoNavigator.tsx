@@ -9,6 +9,7 @@ import { DemoCommunityScreen, DemoShowroomScreen, DemoDebugScreen } from "../scr
 import { DemoPodcastListScreen } from "../screens/DemoPodcastListScreen"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
+import { useColor } from "app/theme/ColorProvider"
 
 export type DemoTabParamList = {
   DemoCommunity: undefined
@@ -31,6 +32,7 @@ const Tab = createBottomTabNavigator<DemoTabParamList>()
 
 export function DemoNavigator() {
   const { bottom } = useSafeAreaInsets()
+  const { colorsProvider } = useColor();
 
   return (
     <Tab.Navigator
@@ -51,7 +53,7 @@ export function DemoNavigator() {
           tabBarAccessibilityLabel: translate("demoNavigator.podcastListTab"),
           tabBarLabel: translate("demoNavigator.podcastListTab"),
           tabBarIcon: ({ focused }) => (
-            <Icon icon="calendar" color={focused ? colors.tint : undefined} size={30} />
+            <Icon icon="calendar" color={focused ? colorsProvider.palette.primary500 : undefined} size={30} />
           ),
         }}
       />
@@ -84,7 +86,7 @@ export function DemoNavigator() {
         options={{
           tabBarLabel: translate("demoNavigator.debugTab"),
           tabBarIcon: ({ focused }) => (
-            <Icon icon="user" color={focused ? colors.tint : undefined} size={30} />
+            <Icon icon="user" color={focused ? colorsProvider.palette.primary500 : undefined} size={30} />
           ),
         }}
       />

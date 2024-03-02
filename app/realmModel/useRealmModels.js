@@ -188,7 +188,7 @@ export const pushRegisterToSelectedDay = (monthName, dayNumber, data, indexUsed)
     realm.write(() => {
       const selectedDay = filterDays(selectedMonth, dayNumber);
       if (selectedDay) {
-        if (indexUsed) return selectedDay.registers.splice(indexUsed, 1, data)
+        if ((indexUsed || indexUsed === 0)) return selectedDay.registers.splice(indexUsed, 1, data)
         selectedDay.registers.push(data);
       }
     });
@@ -220,8 +220,6 @@ export const deleteSelectedDaySpecificRegister = (monthName, dayNumber, indexToD
 }
 
 const armArrOfAverages = (parameter, month) => {
-  console.log(parameter);
-  console.log(JSON.stringify(month, null, 2));
   let obj = {}
   let arrOfDayNumber = []
   let arrOfAverages = []

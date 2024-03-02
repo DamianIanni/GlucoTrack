@@ -5,7 +5,7 @@ import { Text, TextField, Icon, Button } from "app/components";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { colors, spacing } from "app/theme";
 import getHoursFromDate from "app/utils/mineFormatDate";
-
+import { useColor } from "app/theme/ColorProvider";
 
 export const AddValuesComponent = (props) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -13,7 +13,7 @@ export const AddValuesComponent = (props) => {
     const [bloodSugar, setBloodSugar] = useState(props.indexToEdit != null ? props.day.registers[props.indexToEdit].value + "" : "")
     const [rawDate, setRawDate] = useState(props.indexToEdit != null ? props.day.registers[props.indexToEdit].time : null)
     const screenDimensions = useScreenDimensions()
-
+    const {colorsProvider} = useColor()
     // console.log("PROPS OF ADDING COMPONENT", JSON.stringify(props.indexToEdit != null && props.day.registers[props.indexToEdit].time, null, 3));
     // console.log("PROPS OF ADDING COMPONENT", JSON.stringify(props, null, 3));
     const style = {
@@ -67,8 +67,8 @@ export const AddValuesComponent = (props) => {
         },
         buttons: {
             borderRadius: 22,
-            backgroundColor: colors.palette.primary500,
-            borderColor: colors.palette.primary500,
+            backgroundColor: colorsProvider.palette.primary500,
+            borderColor: colorsProvider.palette.primary500,
             paddingHorizontal: spacing.md,
             paddingTop: spacing.xxxs,
             paddingBottom: 0,
@@ -124,7 +124,7 @@ export const AddValuesComponent = (props) => {
         backToEmpty()
         props.cancelAction()
     }
-
+    console.log("EDIT STATE", props);
     return (
         <View style={style.main_container}>
             <DateTimePickerModal
@@ -134,25 +134,18 @@ export const AddValuesComponent = (props) => {
                 onCancel={hideDatePicker}
             />
             <View style={style.addValueElementsView}>
-                {/* <View style={style.inputTextView}>
-                    <Text tx="addValueScreen.inputsAddValues._time" style={style.textNextToValue} />
-                </View>
-                <View style={style.inputTextView}>
-                    <Text tx="addValueScreen.inputsAddValues._value" style={style.textNextToValue} />
-                </View> */}
-                {/* <View style={style.action_container}> */}
                 <View style={{
                     ...style.action_container,
                     flexDirection: "row",
                 }}>
-                    <Text text="Select a " size="md" style={{
+                    <Text tx="addValueScreen.inputsAddValues._select" size="md" style={{
                         ...style.textNextToValue,
                         fontWeight: "normal"
                     }} />
-                    <Text text="Time: " size="md" onPress={() => showDatePicker()} style={{
+                    <Text tx="addValueScreen.inputsAddValues._time" size="md" onPress={() => showDatePicker()} style={{
                         ...style.textNextToValue,
                         fontWeight: "bold",
-                        color: "orange"
+                        color: colorsProvider.palette.primary500
                     }} />
                     {/* <Icon style={{ marginRight: 8 }} size={33} icon="clock" onPress={() => showDatePicker()} /> */}
                     <Text text={dateToUse} size="md" style={{
@@ -164,7 +157,7 @@ export const AddValuesComponent = (props) => {
                     flexDirection: "row",
                     witdh: "100%",
                 }}>
-                    <Text text="Enter a value: " size="md" style={{
+                    <Text tx="addValueScreen.inputsAddValues._enterAValue" size="md" style={{
                         ...style.textNextToValue,
                         fontWeight: "normal"
                     }} />
@@ -174,11 +167,11 @@ export const AddValuesComponent = (props) => {
             </View>
             <View style={style.main_container_buttons}>
                 <Button style={{
-                    ...style.buttons, backgroundColor: (!bloodSugar || bloodSugar.length < 2 || !dateToUse) ? "lightgray" : colors.palette.primary500,
-                    borderColor: (!bloodSugar || bloodSugar.length < 2 || !dateToUse) ? "lightgray" : colors.palette.primary500,
+                    ...style.buttons, backgroundColor: (!bloodSugar || bloodSugar.length < 2 || !dateToUse) ? "lightgray" : colorsProvider.palette.primary500,
+                    borderColor: (!bloodSugar || bloodSugar.length < 2 || !dateToUse) ? "lightgray" : colorsProvider.palette.primary500,
                     opacity: (!bloodSugar || bloodSugar.length < 2 || !dateToUse) ? 0.5 : 1,
-                }} text="Save" disabled={!bloodSugar || !dateToUse} onPress={() => handleSave()} />
-                <Button style={style.buttons} text="Cancel" onPress={() => handleCancel()} />
+                }} tx="common.save" disabled={!bloodSugar || !dateToUse} onPress={() => handleSave()} />
+                <Button style={style.buttons} tx="common.cancel" onPress={() => handleCancel()} />
             </View>
         </View>
     )

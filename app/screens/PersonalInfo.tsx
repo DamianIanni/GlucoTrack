@@ -1,7 +1,14 @@
 import { loadString, saveString } from "app/utils/storage"
 import * as Application from "expo-application"
 import React, { ComponentType, FC, useMemo, useState } from "react"
-import { Linking, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import {
+  GestureResponderEvent,
+  Linking,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native"
 import {
   Button,
   ListItem,
@@ -16,7 +23,8 @@ import { useStores } from "../models"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { colors, spacing } from "../theme"
 import EDIT_ICON from "../../assets/icons/editar-texto.png"
-
+import { useColor } from "app/theme/ColorProvider"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 // function openLinkInBrowser(url: string) {
 //   Linking.canOpenURL(url).then((canOpen) => canOpen && Linking.openURL(url))
@@ -30,6 +38,7 @@ export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function Dem
   const [userNameState, setUserNameState] = useState<string | null>("")
   const [editState, setEditState] = useState(false)
   const [newEditedName, setNewEditedName] = useState("")
+  const { colorsProvider, getColor } = useColor()
 
   const {
     authenticationStore: { logout },
@@ -54,14 +63,73 @@ export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function Dem
     setEditState(!editState)
   }
 
+  const ColorPicker = () => {
+    const [colors] = useState([
+      "#FF6347", // Tomato
+      "#4682B4", // Steel Blue
+      "#6B8E23", // Lime Green
+      "#FFC800", // Gold
+      "#9370DB", // Blue Violet
+      "#FFA500", // Orange
+      // radnom
+      "#FFC0CB",
+      "#ADD8E6",
+    ])
+
+    const styles = {
+      container: {
+        // padding: 10,
+        // backgroundColor: '#FFFFFF', // Background color for light theme
+      },
+      colorContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "center",
+      },
+      color: {
+        width: 45,
+        height: 45,
+        borderRadius: 35,
+        // borderWidth: 2,
+        // borderColor: "black",
+        margin: 4,
+      },
+    }
+
+    return (
+      <View style={styles.container}>
+        {/* <Text style={styles.title}>Choose a Color:</Text> */}
+        <View style={styles.colorContainer}>
+          {colors.map((color, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.color,
+                {
+                  backgroundColor: color,
+                  width: color === colorsProvider.palette.primary500 ? 55 : 45,
+                  height: color === colorsProvider.palette.primary500 ? 55 : 45,
+                },
+              ]}
+              onPress={() => {
+                AsyncStorage.setItem("appColor", color)
+                getColor(color)
+              }} // Change this line
+            />
+          ))}
+        </View>
+      </View>
+    )
+  }
+
   const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(
     () =>
       function PasswordRightAccessory(props: TextFieldAccessoryProps) {
         return (
           <Icon
             icon={"edit"}
-            color={colors.palette.neutral800}
-            containerStyle={props.style}
+            color={"black"}
+            containerStyle={{ marginLeft: "-8%" }}
             size={35}
             onPress={() => changeEditStatus()}
           />
@@ -74,25 +142,6 @@ export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function Dem
   // @ts-expect-error
   const usingFabric = global.nativeFabricUIManager != null
 
-  // const demoReactotron = React.useMemo(
-  //   () => async () => {
-  //     if (__DEV__) {
-  //       console.tron.display({
-  //         name: "DISPLAY",
-  //         value: {
-  //           appId: Application.applicationId,
-  //           appName: Application.applicationName,
-  //           appVersion: Application.nativeApplicationVersion,
-  //           appBuildVersion: Application.nativeBuildVersion,
-  //           hermesEnabled: usingHermes,
-  //         },
-  //         important: true,
-  //       })
-  //     }
-  //   },
-  //   [],
-  // )
-
   return (
     <Screen preset="scroll" safeAreaEdges={["top"]} contentContainerStyle={$container}>
       <Text style={$title} preset="heading" tx="demoDebugScreen.title" />
@@ -100,7 +149,7 @@ export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function Dem
         <ListItem
           LeftComponent={
             <View style={$item}>
-              <Text preset="bold">Name</Text>
+              <Text tx="personalInfo.name" preset="bold" />
               {editState ? (
                 <TextField
                   placeholderTx="demoDebugScreen.newNamePlaceHolder"
@@ -120,26 +169,33 @@ export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function Dem
                 multiline={false}
                 editable={false}
               />
-            ) : undefined
+            ) : (
+              <></>
+            )
           }
         />
 
-        <ListItem
-          LeftComponent={
-            <View style={$item}>
-              <Text preset="bold">App Version</Text>
-              <Text>{Application.nativeApplicationVersion}</Text>
-            </View>
-          }
-        />
-        <ListItem
-          LeftComponent={
-            <View style={$item}>
-              <Text preset="bold">App Build Version</Text>
-              <Text>{Application.nativeBuildVersion}</Text>
-            </View>
-          }
-        />
+        {!editState && (
+          <View>
+            <ListItem
+              LeftComponent={
+                <View style={$item}>
+                  <Text tx="personalInfo.chooseColor" preset="bold" />
+                  <Text tx="personalInfo.colorHelp" />
+                </View>
+              }
+            />
+            <ColorPicker />
+            <ListItem
+              LeftComponent={
+                <View style={$item}>
+                  <Text preset="bold">App Version</Text>
+                  <Text>{Application.nativeApplicationVersion}</Text>
+                </View>
+              }
+            />
+          </View>
+        )}
       </View>
       {editState && (
         <View style={$buttonContainer}>
@@ -177,15 +233,9 @@ const $title: TextStyle = {
   marginBottom: spacing.xxl,
 }
 
-const $reportBugsLink: TextStyle = {
-  color: colors.tint,
-  marginBottom: spacing.lg,
-  alignSelf: isRTL ? "flex-start" : "flex-end",
-}
-
 const $item: ViewStyle = {
   marginBottom: spacing.md,
-  width: "90%",
+  width: "100%",
 }
 
 const $itemsContainer: ViewStyle = {
