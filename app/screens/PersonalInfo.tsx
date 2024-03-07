@@ -2,8 +2,6 @@ import { loadString, saveString } from "app/utils/storage"
 import * as Application from "expo-application"
 import React, { ComponentType, FC, useMemo, useState } from "react"
 import {
-  GestureResponderEvent,
-  Linking,
   TextStyle,
   TouchableOpacity,
   View,
@@ -18,11 +16,9 @@ import {
   Icon,
   TextFieldAccessoryProps,
 } from "../components"
-import { isRTL } from "../i18n"
 import { useStores } from "../models"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
-import { colors, spacing } from "../theme"
-import EDIT_ICON from "../../assets/icons/editar-texto.png"
+import { spacing } from "../theme"
 import { useColor } from "app/theme/ColorProvider"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
@@ -225,10 +221,6 @@ const $container: ViewStyle = {
   paddingHorizontal: spacing.lg,
 }
 
-const $containerTextField: ViewStyle = {
-  width: "90%",
-}
-
 const $title: TextStyle = {
   marginBottom: spacing.xxl,
 }
@@ -250,9 +242,3 @@ const $buttonContainer: ViewStyle = {
   marginBottom: spacing.xxxs,
 }
 
-const $hint: TextStyle = {
-  color: colors.palette.neutral600,
-  fontSize: 12,
-  lineHeight: 15,
-  paddingBottom: spacing.lg,
-}
