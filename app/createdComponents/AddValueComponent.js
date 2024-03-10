@@ -124,7 +124,6 @@ export const AddValuesComponent = (props) => {
         backToEmpty()
         props.cancelAction()
     }
-    console.log("EDIT STATE", props);
     return (
         <View style={style.main_container}>
             <DateTimePickerModal

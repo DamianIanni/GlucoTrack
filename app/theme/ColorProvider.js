@@ -16,7 +16,6 @@ export const ColorProvider = ({ children }) => {
       try {
         const appColor = await AsyncStorage.getItem("appColor");
         if (appColor) {
-        console.log("APP COLOR", appColor);
           // Set the retrieved color from AsyncStorage as the initial state of mainColor
           setMainColor(appColor);
         }

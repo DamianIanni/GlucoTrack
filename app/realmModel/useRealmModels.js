@@ -103,7 +103,7 @@ export const createMonths = (months) => {
 
         if (mesExistente.length === 0) {
           const nuevoMes = realm.create('Month', { monthName: nombreMes, days: [] });
-          console.log(`Se ha creado el mes ${nombreMes}.`);
+          // console.log(`Se ha creado el mes ${nombreMes}.`);
           agregarDiasAlMesExistente(nombreMes);
         } else {
           // console.log(`El mes ${nombreMes} ya existe en la base de datos.`);
@@ -128,13 +128,13 @@ export const logMonthDetails = (monthName) => {
     const month = realm.objects('Month').filtered('monthName = $0', monthName)[0];
     
     if (month) {
-      console.log(`Details of ${monthName}:`);
-      console.log('Days:');
+      // console.log(`Details of ${monthName}:`);
+      // console.log('Days:');
       month.days.forEach((day) => {
-        console.log(`- Day ${day.number}: ${day.registers.length} registers`);
+        // console.log(`- Day ${day.number}: ${day.registers.length} registers`);
       });
     } else {
-      console.log(`Month ${monthName} not found in the database.`);
+      // console.log(`Month ${monthName} not found in the database.`);
     }
   } catch (error) {
     console.error("Error in logMonthDetails:", error);
@@ -337,12 +337,12 @@ const agregarDiasAlMesExistente = (nombreMesEnIngles) => {
         const nuevoDia = { number: i, registers: [] };
         mesExistente[0].days.push(nuevoDia);
       }
-      console.log(`Se han agregado los días al mes ${mesesEnIngles[indiceMes]}.`);
+      // console.log(`Se han agregado los días al mes ${mesesEnIngles[indiceMes]}.`);
     // });
   } else if (mesExistente.length > 0) {
-    console.log(`El mes ${mesesEnIngles[indiceMes]} ya tiene días agregados.`);
+    // console.log(`El mes ${mesesEnIngles[indiceMes]} ya tiene días agregados.`);
   } else {
-    console.log(`El mes ${mesesEnIngles[indiceMes]} no existe en la base de datos.`);
+    // console.log(`El mes ${mesesEnIngles[indiceMes]} no existe en la base de datos.`);
   }
 };
 
