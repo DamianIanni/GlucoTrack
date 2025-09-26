@@ -1,168 +1,178 @@
-<<<<<<< HEAD
-# Welcome to your new ignited app!
-
-[![CircleCI](https://circleci.com/gh/infinitered/ignite.svg?style=svg)](https://circleci.com/gh/infinitered/ignite)
-
-## The latest and greatest boilerplate for Infinite Red opinions
-
-This is the boilerplate that [Infinite Red](https://infinite.red) uses as a way to test bleeding-edge changes to our React Native stack.
-
-Currently includes:
-
-- React Native
-- React Navigation
-- MobX State Tree
-- TypeScript
-- And more!
-
-## Quick Start
-
-The Ignite boilerplate project's structure will look similar to this:
-
-```
-ignite-project
-├── app
-│   ├── components
-│   ├── config
-│   ├── i18n
-│   ├── models
-│   ├── navigators
-│   ├── screens
-│   ├── services
-│   ├── theme
-│   ├── utils
-│   └── app.tsx
-├── assets
-│   ├── icons
-│   └── images
-├── test
-│   ├── __snapshots__
-│   ├── mockFile.ts
-│   └── setup.ts
-├── README.md
-├── android
-│   ├── app
-│   ├── build.gradle
-│   ├── gradle
-│   ├── gradle.properties
-│   ├── gradlew
-│   ├── gradlew.bat
-│   ├── keystores
-│   └── settings.gradle
-├── ignite
-│   └── templates
-|       |── app-icon
-│       ├── component
-│       ├── model
-│       ├── navigator
-│       └── screen
-├── index.js
-├── ios
-│   ├── IgniteProject
-│   ├── IgniteProject-tvOS
-│   ├── IgniteProject-tvOSTests
-│   ├── IgniteProject.xcodeproj
-│   └── IgniteProjectTests
-├── .env
-└── package.json
-
-```
-
-### ./app directory
-
-Included in an Ignite boilerplate project is the `app` directory. This is a directory you would normally have to create when using vanilla React Native.
-
-The inside of the `app` directory looks similar to the following:
-
-```
-app
-├── components
-├── config
-├── i18n
-├── models
-├── navigators
-├── screens
-├── services
-├── theme
-├── utils
-└── app.tsx
-```
-
-**components**
-This is where your reusable components live which help you build your screens.
-
-**i18n**
-This is where your translations will live if you are using `react-native-i18n`.
-
-**models**
-This is where your app's models will live. Each model has a directory which will contain the `mobx-state-tree` model file, test file, and any other supporting files like actions, types, etc.
-
-**navigators**
-This is where your `react-navigation` navigators will live.
-
-**screens**
-This is where your screen components will live. A screen is a React component which will take up the entire screen and be part of the navigation hierarchy. Each screen will have a directory containing the `.tsx` file, along with any assets or other helper files.
-
-**services**
-Any services that interface with the outside world will live here (think REST APIs, Push Notifications, etc.).
-
-**theme**
-Here lives the theme for your application, including spacing, colors, and typography.
-
-**utils**
-This is a great place to put miscellaneous helpers and utilities. Things like date helpers, formatters, etc. are often found here. However, it should only be used for things that are truly shared across your application. If a helper or utility is only used by a specific component or model, consider co-locating your helper with that component or model.
-
-**app.tsx** This is the entry point to your app. This is where you will find the main App component which renders the rest of the application.
-
-### ./assets directory
-
-This directory is designed to organize and store various assets, making it easy for you to manage and use them in your application. The assets are further categorized into subdirectories, including `icons` and `images`:
-
-```
-assets
-├── icons
-└── images
-```
-
-**icons**
-This is where your icon assets will live. These icons can be used for buttons, navigation elements, or any other UI components. The recommended format for icons is PNG, but other formats can be used as well.
-
-Ignite comes with a built-in `Icon` component. You can find detailed usage instructions in the [docs](https://github.com/infinitered/ignite/blob/master/docs/Components-Icon.md).
-
-**images**
-This is where your images will live, such as background images, logos, or any other graphics. You can use various formats such as PNG, JPEG, or GIF for your images.
-
-Another valuable built-in component within Ignite is the `AutoImage` component. You can find detailed usage instructions in the [docs](https://github.com/infinitered/ignite/blob/master/docs/Components-AutoImage.md).
-
-How to use your `icon` or `image` assets:
-
-```
-import { Image } from 'react-native';
-
-const MyComponent = () => {
-  return (
-    <Image source={require('../assets/images/my_image.png')} />
-  );
-};
-```
-
-### ./ignite directory
-
-The `ignite` directory stores all things Ignite, including CLI and boilerplate items. Here you will find templates you can customize to help you get started with React Native.
-
-### ./test directory
-
-This directory will hold your Jest configs and mocks.
-
-## Running Maestro end-to-end tests
-
-Follow our [Maestro Setup](https://ignitecookbook.com/docs/recipes/MaestroSetup) recipe from the [Ignite Cookbook](https://ignitecookbook.com/)!
-
-## Previous Boilerplates
-
-- [2018 aka Bowser](https://github.com/infinitered/ignite-bowser)
-- [2017 aka Andross](https://github.com/infinitered/ignite-andross)
-- [2016 aka Ignite 1.0](https://github.com/infinitered/ignite-ir-boilerplate-2016)
-=======
 # GlucoTrack
->>>>>>> c09f96540bac69f162542456b0e020e4732cde81
+
+_A modern React Native glucose tracking application designed for diabetes management_
+
+---
+
+## Project Overview
+
+**GlucoTrack** is a comprehensive mobile application built to help users monitor and track their blood glucose levels over time. This project demonstrates proficiency in **React Native development**, **mobile architecture design**, and **healthcare application development**.
+
+### Key Features
+
+- **Calendar-Based Tracking**: Intuitive calendar interface for logging daily glucose readings
+- **Data Visualization**: Interactive charts showing glucose trends and patterns over time
+- **Offline-First Architecture**: Local data persistence ensuring users can access their data anywhere
+- **Modern UI/UX**: Clean, accessible design following mobile best practices
+- **Secure Data Management**: Robust local storage with proper data validation
+- **Internationalization**: Multi-language support ready implementation
+
+---
+
+## Technical Stack
+
+### Frontend & Mobile
+
+- **React Native** `0.72.6` - Cross-platform mobile development
+- **TypeScript** - Type-safe development and enhanced code quality
+- **Expo SDK** `49` - Streamlined development and deployment workflow
+
+### State Management & Architecture
+
+- **MobX State Tree** - Predictable state management with time-travel debugging
+- **React Navigation** `6.x` - Modern navigation patterns and deep linking
+
+### Data & Storage
+
+- **Realm Database** `12.6.0` - High-performance local database
+- **AsyncStorage** - Persistent key-value storage for user preferences
+
+### UI & Visualization
+
+- **React Native Chart Kit** - Beautiful, responsive data visualizations
+- **React Native Calendars** - Feature-rich calendar component
+- **React Native Reanimated** - Smooth, native-feeling animations
+
+### Development & Quality
+
+- **Ignite Boilerplate** - Production-ready React Native project structure
+- **ESLint + Prettier** - Consistent code formatting and quality
+- **Jest** - Comprehensive testing framework
+- **EAS Build** - Modern build and deployment pipeline
+
+---
+
+## Architecture & Design Patterns
+
+### Clean Architecture Implementation
+
+```
+app/
+├── components/          # Reusable UI components
+├── screens/            # Screen-level components
+├── models/             # MobX State Tree models
+├── services/           # External API integrations
+├── utils/              # Helper functions and utilities
+├── theme/              # Design system and styling
+├── navigators/         # Navigation configuration
+└── realmModel/         # Database schemas and operations
+```
+
+### Key Architectural Decisions
+
+- **Separation of Concerns**: Clear boundaries between UI, business logic, and data layers
+- **Scalable State Management**: MobX State Tree for complex state requirements
+- **Offline-First Design**: Realm database ensures app functionality without internet connectivity
+- **Component-Driven Development**: Reusable, testable component architecture
+- **Type Safety**: Full TypeScript implementation for enhanced developer experience
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Expo CLI
+- iOS Simulator / Android Emulator
+
+### Installation & Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/[username]/GlucoTrack.git
+cd GlucoTrack
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm start
+
+# Run on specific platforms
+npm run ios     # iOS simulator
+npm run android # Android emulator
+```
+
+### Available Scripts
+
+```bash
+npm run compile     # TypeScript compilation check
+npm run lint        # Code linting and formatting
+npm run test        # Run test suite
+npm run build:ios   # Build for iOS production
+npm run build:android # Build for Android production
+```
+
+---
+
+## Core Features Deep Dive
+
+### 1. Glucose Value Management
+
+- **Add/Edit Readings**: Timestamp-based glucose value entry
+- **Validation**: Input validation ensuring data integrity
+- **History Tracking**: Complete audit trail of all entries
+
+### 2. Calendar Interface
+
+- **Monthly View**: Navigate through months to view historical data
+- **Daily Detail**: Detailed view of specific day's readings
+- **Visual Indicators**: Quick visual feedback for days with readings
+
+### 3. Data Visualization
+
+- **Trend Charts**: Line charts showing glucose patterns over time
+- **Monthly Averages**: Statistical analysis of glucose control
+- **Interactive Elements**: Touch-enabled chart interactions
+
+### 4. User Experience
+
+- **Intuitive Navigation**: Tab-based navigation with clear information hierarchy
+- **Responsive Design**: Optimized for various screen sizes
+- **Accessibility**: Screen reader support and proper contrast ratios
+
+---
+
+## Testing & Quality Assurance
+
+- **Unit Tests**: Jest-based testing for critical business logic
+- **Type Safety**: Full TypeScript coverage preventing runtime errors
+- **Code Quality**: ESLint and Prettier ensuring consistent code standards
+- **Performance**: Optimized for smooth 60fps performance
+
+---
+
+## Future Enhancements
+
+- **Cloud Synchronization**: Multi-device data sync
+- **Healthcare Integration**: Export data for healthcare providers
+- **Advanced Analytics**: AI-powered insights and recommendations
+- **Social Features**: Family/caregiver access and notifications
+- **Wearable Integration**: Apple Health and Google Fit connectivity
+
+---
+
+## Developer Information
+
+This project showcases expertise in:
+
+- **Mobile Development**: Cross-platform React Native applications
+- **Healthcare Technology**: HIPAA-compliant data handling considerations
+- **Modern JavaScript/TypeScript**: ES6+, async/await, advanced patterns
+- **Database Design**: Efficient data modeling and relationships
+- **UI/UX Design**: User-centered design for healthcare applications
+- **DevOps**: CI/CD pipelines and automated deployment strategies
+
+_This project demonstrates production-ready mobile development skills and attention to user experience in the healthcare technology space._
